@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style.css" rel="stylesheet" type="text/css" />
+
+        <title>Simple Net Art</title>
+        <style>
+            body {
+                background: #d4d4d4;
+                font-family: 'Courier New', monospace;
+                text-align: center;
+                overflow: hidden;
+            }
+            .container {
+                margin-top: 50px;
+            }
+            .diagram {
+                display: inline-block;
+                padding: 20px;
+                border: 2px solid black;
+                background: white;
+                position: relative;
+            }
+         
+            .line:hover {
+                animation: shake 0.3s infinite;
+            }
+            @keyframes shake {
+                0% { transform: rotate(0deg); }
+                25% { transform: rotate(5deg); }
+                50% { transform: rotate(-5deg); }
+                75% { transform: rotate(5deg); }
+                100% { transform: rotate(0deg); }
+            }
+            .text-box {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: #e0e0e0; /* 옛날 컴퓨터 창의 배경 색 */
+            border: 2px solid #000; /* 두꺼운 테두리 */
+            border-radius: 5px; /* 둥근 모서리 */
+            box-shadow: 3px 3px 5px #888888; /* 그림자 효과 */
+            text-align: center;
+            position: relative;
+            }
+
+            .text-box::before {
+            content: "■"; /* 창 왼쪽 상단의 아이콘 */
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 18px;
+            color: #ff0000; /* 빨간색 */
+            }
+
+            .text-box:hover {
+            background: #dcdcdc; /* 마우스를 올렸을 때의 색상 */
+            box-shadow: 3px 3px 8px #444444; /* hover 시 그림자 효과 */
+            }
+            
+            .popup {
+                position: fixed;
+                background: white;
+                border: 2px solid black;
+                padding: 10px;
+                box-shadow: 4px 4px black;
+                font-size: 14px;
+                z-index: 1000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="diagram">
+                <div class="line"></div>
+                <div class="text-box" id="textBox">Where is Art?</div>
+            </div>
+        </div>
+        
+        <script>
+            const phrases = ["Where is Art?", "Art Happens Here", "Is the Internet Art?", "404 Art Not Found"];
+            const colors = ["#ff9999", "#99ff99", "#9999ff", "#ffff99", "#ffccff"];
+            
+            document.getElementById("textBox").addEventListener("click", function() {
+                this.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+                this.style.background = colors[Math.floor(Math.random() * colors.length)];
+            });
+    
+            function createPopup() {
+                const messages = ["Warning: Art is Missing!", "Reconnecting to Art Server...", "Server Error: Art Not Found", "Critical Art Failure!", "Art.exe has stopped working."];
+                let popup = document.createElement("div");
+                popup.classList.add("popup");
+                popup.innerText = messages[Math.floor(Math.random() * messages.length)];
+                
+                let x = Math.random() * (window.innerWidth - 150);
+                let y = Math.random() * (window.innerHeight - 100);
+                
+                popup.style.left = `${x}px`;
+                popup.style.top = `${y}px`;
+                
+                document.body.appendChild(popup);
+                
+                setTimeout(() => { popup.remove(); }, 5000); // 5초 후 제거
+            }
+            
+            function startPopupChaos() {
+                setInterval(createPopup, 500); // 0.5초마다 팝업 생성
+            }
+            
+            setTimeout(startPopupChaos, 2000); // 2초 후 혼돈 시작
+        </script>
+</body>
+
+</html>
