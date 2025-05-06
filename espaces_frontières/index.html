@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fenêtre avec Icônes &amp; Sons Locaux</title>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<canvas id="fogCanvas"></canvas>
+
+
+<div class="overlay-direction overlay-north"></div>
+<div class="overlay-direction overlay-east"></div>
+<div class="overlay-direction overlay-west"></div>
+<div class="overlay-direction overlay-south"></div>
+<div class="intro" id="intro">
+<p>L’espace est fluide</p>
+<button id="startBtn">Essaye d'essuyer la vitre</button>
+</div>
+
+<audio id="northAudio" preload="auto" src="src/audio/north.mp3"></audio>
+<audio id="eastAudio" preload="auto" src="src/audio/east.mp3"></audio>
+<audio id="westAudio" preload="auto" src="src/audio/west.mp3"></audio>
+<audio id="southAudio" preload="auto" src="src/audio/south.mp3"></audio>
+<script src="script.js"></script>
+
+<img class="icon icon-north" src="src/image/north.png" style="position: fixed; z-index: 3; width: 40px; opacity: 0; cursor: pointer; top:5%; left:50%; transform:translateX(-50%)"/>
+<img class="icon icon-south" src="src/image/south.png" style="position: fixed; z-index: 3; width: 40px; opacity: 0; cursor: pointer; bottom:5%; left:50%; transform:translateX(-50%)"/>
+<img class="icon icon-east" src="src/image/east.png" style="position: fixed; z-index: 3; width: 40px; opacity: 0; cursor: pointer; right:5%; top:50%; transform:translateY(-50%)"/>
+<img class="icon icon-west" src="src/image/west.png" style="position: fixed; z-index: 3; width: 40px; opacity: 0; cursor: pointer; left:5%; top:50%; transform:translateY(-50%)"/>
+
+</body>
+</html>
