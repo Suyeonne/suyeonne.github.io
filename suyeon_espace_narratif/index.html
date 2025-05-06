@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Chien Perdu</title>
+  <style>
+    body {
+      margin: 0;
+      background: url('src/img/데이지3.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow-x: hidden;
+      margin-top: 75px;
+    }
+
+    .map-container, .memory-container {
+      position: relative;
+      max-width: 900px;
+      margin: auto;
+      transition: opacity 1s ease;
+    }
+
+    #map {
+      width: 100%;
+      display: block;
+      border-bottom: 4px solid #fff;
+    }
+
+    .dog-marker {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('src/img/som_map.png');
+      background-size: 100% 100%;
+      background-position: center;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
+    .note-box {
+      position: absolute;
+      background: rgba(255,255,255,0.95);
+      color: #000;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 1em;
+      display: none;
+      white-space: pre-line;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .note-box button {
+      display: block;
+      margin-top: 10px;
+      background: #444;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .memory-container {
+      display: none;
+      opacity: 0;
+      padding: 2em 0;
+    }
+
+    .memory-text {
+      text-align: center;
+      color: white;
+      font-size: 1.2em;
+      margin-bottom: 1em;
+    }
+
+    .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .photo-grid img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="map-container" id="mapSection">
+  <img src="src/img/map.png" id="map" alt="장승배기 지도" />
+
+  <!-- 일반 마커들 -->
+  <div class="dog-marker" style="top: 30%; left: 60%;" onclick="playSoundAndShowNote(1)"></div>
+  <div class="note-box" id="note1" style="top: 36%; left: 60%;">
+    Ce n’est pas ici…
+    <button onclick="closeNote(1)">Fermer</button>
+  </div>
+
+  <div class="dog-marker" style="top: 68%; left: 35%;" onclick="playSoundAndShowNote(2)"></div>
+  <div class="note-box" id="note2" style="top: 71%; left: 35%;">
+    Toujours pas trouvé.
+    <button onclick="closeNote(2)">Fermer</button>
+  </div>
+
+  <div class="dog-marker" style="top: 50%; left: 80%;" onclick="playSoundAndShowNote(3)"></div>
+  <div class="note-box" id="note3" style="top: 56%; left: 80%;">
+    Ici non plus.
+    <button onclick="closeNote(3)">Fermer</button>
+  </div>
+
+  <!-- 찾았다 마커 -->
+  <div class="dog-marker" style="top: 20%; left: 40%;" onclick="playSoundAndShowNote(4)"></div>
+  <div class="note-box" id="note4" style="top: 26%; left: 40%;">
+    La voilà ! 🐶
+    <button onclick="showFollowup()">👉 Suivant</button>
+  </div>
+
+  <div class="note-box" id="noteFollowup" style="top: 33%; left: 40%; display: none;">
+    En réalité, Sôm est partie pour le paradis des chiens le 10 mars 2025.
+    <button onclick="showMemoryIntro()">👉 	Suivant</button>
+  </div>
+
+  <div class="note-box" id="noteMemory" style="top: 40%; left: 40%; display: none;">
+    Ce site a été créé pour garder vivant le souvenir de Somi.
+    <button onclick="goToMemory()">👉 Aller à la galerie.</button>
+  </div>
+</div>
+
+<script>
+  window.onload = () => {
+    document.querySelectorAll('.dog-marker').forEach(marker => marker.style.display = 'block');
+  };
+
+  function showNote(index) {
+    document.getElementById('note' + index).style.display = 'block';
+  }
+
+  function closeNote(index) {
+    document.getElementById('note' + index).style.display = 'none';
+  }
+
+  function showMemoryIntro() {
+    document.getElementById('noteFollowup').style.display = 'none';
+    document.getElementById('noteMemory').style.display = 'block';
+  }
+
+  function goToMemory() {
+  window.location.href = "gallery.html";
+}
+
+function showFollowup() {
+  document.getElementById('note4').style.display = 'none';
+  document.getElementById('noteFollowup').style.display = 'block';
+}
+
+function playSoundAndShowNote(index) {
+  const soundId = 'dogSound' + index;
+  const dogSound = document.getElementById(soundId);
+  if (dogSound) {
+    dogSound.currentTime = 0;
+    dogSound.play().catch(error => {
+      console.error("소리 재생 실패:", error);
+    });
+  }
+
+  document.getElementById('note' + index).style.display = 'block';
+}
+
+</script>
+
+<audio id="dogSound1" src="src/audio/sound1.mp3" preload="auto"></audio>
+<audio id="dogSound2" src="src/audio/sound2.mp3" preload="auto"></audio>
+<audio id="dogSound3" src="src/audio/sound3.mp3" preload="auto"></audio>
+<audio id="dogSound4" src="src/audio/sound4.mp3" preload="auto"></audio>
+
+</body>
+</html>
