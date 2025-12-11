@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suyeon NFTs Collection</title>
+  <style>
+
+    .top-right-label {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  text-align: right;
+  z-index: 9999;
+}
+
+.error-text {
+  display: inline-block;
+  border: 3px solid #c60000;
+  color: #c60000;
+  padding: 6px 12px;
+  font-size: 22px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.owner-number {
+  margin-top: 8px;
+  color: #c60000;
+  font-size: 14px;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      
+      
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      min-height: 100vh;
+
+      /* 배경 이미지로 교체 */
+      background-image: url("img/sea3.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+      color: #fef9ff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 가운데 선명 / 가장자리 블러 + 비네팅 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -5vh;
+      pointer-events: none;
+      z-index: 0;
+
+      background: rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      -webkit-mask-image: radial-gradient(
+        circle at center,
+        transparent 45%,
+        black 75%
+      );
+      mask-image: radial-gradient(circle at center, transparent 45%, black 75%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -5vh;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(3, 7, 18, 0.6) 80%
+      );
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .owner-address {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffecff;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* NFT 창들이 떠다니는 영역 */
+    #nft-container {
+      position: relative;
+      z-index: 2;
+      height: calc(100vh - 140px);
+    }
+
+    /* ============ 물고기 모양 NFT 프레임 ============ */
+    .nft-window {
+      position: absolute;
+      width: 280px;
+      height: 200px;
+      cursor: pointer;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+      
+      /* 헤엄치는 애니메이션 + 투명도 변화 */
+      animation: 
+        swim var(--swim-duration, 15s) linear infinite,
+        fadeInOut var(--fade-duration, 8s) ease-in-out infinite;
+      animation-delay: var(--swim-delay, 0s), var(--fade-delay, 0s);
+    }
+    
+    @keyframes swim {
+      0% {
+        transform: translateX(100vw) translateY(var(--swim-start-y, 0px)) rotate(0deg);
+      }
+      25% {
+        transform: translateX(75vw) translateY(calc(var(--swim-start-y, 0px) - 30px)) rotate(-2deg);
+      }
+      50% {
+        transform: translateX(50vw) translateY(calc(var(--swim-start-y, 0px) + 20px)) rotate(2deg);
+      }
+      75% {
+        transform: translateX(25vw) translateY(calc(var(--swim-start-y, 0px) - 20px)) rotate(-1deg);
+      }
+      100% {
+        transform: translateX(-300px) translateY(var(--swim-start-y, 0px)) rotate(0deg);
+      }
+    }
+    
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0.4;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.4;
+      }
+    }
+
+    .nft-window.active {
+      filter: drop-shadow(0 12px 30px rgba(255, 255, 255, 0.3));
+      z-index: 20;
+    }
+
+    /* 물고기 모양 컨테이너 */
+    .fish-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 물고기 몸통 (타원형) */
+    .fish-body {
+      position: absolute;
+      width: 180px;
+      height: 120px;
+      left: 50px;
+      top: 40px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(200, 230, 255, 0.85) 50%,
+        rgba(150, 200, 255, 0.9) 100%);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 
+        inset -5px -5px 15px rgba(0, 0, 0, 0.1),
+        inset 5px 5px 15px rgba(255, 255, 255, 0.5);
+    }
+
+    /* 물고기 꼬리 */
+    .fish-tail {
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: 10px;
+      top: 70px;
+      border-left: 60px solid transparent;
+      border-right: 60px solid rgba(150, 200, 255, 0.8);
+      border-top: 30px solid transparent;
+      border-bottom: 30px solid transparent;
+      filter: drop-shadow(-2px 0 3px rgba(0, 0, 0, 0.2));
+    }
+
+    /* 물고기 지느러미 (위) */
+    .fish-fin-top {
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: 120px;
+      top: 25px;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+      border-bottom: 35px solid rgb(35, 35, 35);
+      filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.15));
+    }
+
+    /* 물고기 지느러미 (아래) */
+    .fish-fin-bottom {
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: 140px;
+      top: 155px;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 25px solid rgb(35, 35, 35);
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+    }
+
+    /* 물고기 눈 */
+    .fish-eye {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      right: 190px;
+      top: 70px;
+      background: radial-gradient(circle at 30% 30%, 
+        white 0%, 
+        white 25%,
+        #1a1a1a 25%,
+        #1a1a1a 70%,
+        rgba(0, 0, 0, 0.3) 100%);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* NFT 이미지 (물고기 몸통 안에) */
+    .window-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #333;
+      padding: 10px;
+      text-align: center;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    /* 물고기 이름표 */
+    .fish-name {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #1a5490;
+      white-space: nowrap;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    /* ============ 배경 물결 ============ */
+    .global-ripple-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bg-ripple {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.22) 35%,
+        transparent 70%
+      );
+      transform: translate(-50%, -50%) scale(0.4);
+      opacity: 0.7;
+      animation: bgRipple 1.6s ease-out forwards;
+      mix-blend-mode: screen;
+    }
+
+    .bg-ripple-reflect {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.12) 35%,
+        transparent 70%
+      );
+      transform: translate(-50%, -50%) scale(0.4);
+      opacity: 0.45;
+      filter: blur(4px);
+      animation: bgRippleReflect 1.6s ease-out forwards;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes bgRipple {
+      0% {
+        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 0.7;
+      }
+      45% {
+        transform: translate(-50%, -50%) scale(8);
+        opacity: 0.4;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(16);
+        opacity: 0;
+      }
+    }
+
+    @keyframes bgRippleReflect {
+      0% {
+        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 0.4;
+      }
+      45% {
+        transform: translate(-50%, -50%) scale(6);
+        opacity: 0.25;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(12);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      #nft-container {
+        height: calc(100vh - 120px);
+      }
+      .nft-window {
+        width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>404 Not Found</h1>
+
+  <!-- 배경 전체 물결 -->
+  <div class="global-ripple-layer" id="globalRippleLayer"></div>
+
+  <div class="owner-address">
+    Loading owner...
+  </div>
+
+  <!-- NFT 창들이 떠다니는 영역 -->
+  <div id="nft-container"></div>
+
+  <script>
+    let globalZ = 100;
+
+    async function fetchNFTs() {
+      const address = "tz1VoHgey5haJj22gysCuRHXgYzPPvghQLEg";
+      const ownerAddressElement = document.querySelector(".owner-address");
+      const nftContainer = document.getElementById("nft-container");
+
+      ownerAddressElement.textContent = `Owner: ${address}`;
+      nftContainer.innerHTML = "";
+
+      try {
+        const response = await fetch(
+          `https://api.tzkt.io/v1/tokens/balances?account=${address}&token.standard=fa2&limit=1000`
+        );
+        const data = await response.json();
+
+        const nfts = data.filter((item) => item.token.metadata);
+
+        console.log('Total NFTs found:', nfts.length);
+
+        nfts.forEach((nft, index) => {
+          const meta = nft.token.metadata || {};
+          const name = meta.name || "Untitled";
+
+          let img = meta.displayUri || meta.artifactUri || meta.thumbnailUri;
+          
+          if (!img) {
+            console.log(`No image found for: ${name}`);
+            return;
+          }
+          
+          if (img.startsWith("ipfs://")) {
+            img = img.replace("ipfs://", "https://ipfs.io/ipfs/");
+          }
+
+          console.log(`Loading NFT: ${name}, Image: ${img}`);
+
+          const contract = nft.token.contract.address;
+          const tokenId = nft.token.tokenId;
+          const detailUrl = `https://tzkt.io/${contract}/tokens/${tokenId}`;
+
+          const win = document.createElement("div");
+          win.className = "nft-window";
+          win.style.zIndex = ++globalZ;
+
+          const areaRect = nftContainer.getBoundingClientRect();
+          const maxLeft = Math.max(0, areaRect.width - 280);
+          const maxTop = Math.max(0, areaRect.height - 280);
+
+          // 시작 위치를 더 랜덤하게 (화면 높이 전체에 걸쳐)
+          const left = Math.random() * 100; // 초기 left는 의미없음 (애니메이션이 덮어씀)
+          const top = Math.random() * areaRect.height; // 화면 전체 높이에 랜덤 배치
+
+          win.style.left = left + "px";
+          win.style.top = top + "px";
+          
+          // 각 NFT마다 다른 속도, 딜레이, 시작 높이로 헤엄치게
+          const swimDuration = 20 + Math.random() * 20; // 20~40초 (더 느리고 다양하게)
+          const swimDelay = 0; // 0~10초 딜레이 (더 분산)
+          const swimStartY = (Math.random() - 0.5) * areaRect.height; // -50%~+50% 높이
+          
+          // 투명도 변화 애니메이션
+          const fadeDuration = 6 + Math.random() * 6; // 6~12초
+          const fadeDelay = 0; // 0~8초 딜레이
+          
+          win.style.setProperty('--swim-duration', `${swimDuration}s`);
+          win.style.setProperty('--swim-delay', `${swimDelay}s`);
+          win.style.setProperty('--swim-start-y', `${swimStartY}px`);
+          win.style.setProperty('--fade-duration', `${fadeDuration}s`);
+          win.style.setProperty('--fade-delay', `${fadeDelay}s`);
+
+          win.innerHTML = `
+            <div class="fish-container">
+              <div class="fish-tail"></div>
+              <div class="fish-fin-top"></div>
+              <div class="fish-fin-bottom"></div>
+              <div class="fish-body">
+                <a href="${detailUrl}" target="_blank" style="display: block; width: 100%; height: 100%;">
+                  <img class="window-image" src="${img}" alt="${name}" 
+                       onerror="this.parentElement.innerHTML='<div class=\\'image-error\\'>${name}<br/><br/>Image failed to load</div>'" />
+                </a>
+              </div>
+              <div class="fish-eye"></div>
+              <div class="fish-name">${name}</div>
+            </div>
+          `;
+
+          nftContainer.appendChild(win);
+
+          makeDraggable(win);
+        });
+
+        console.log('NFT windows created:', nfts.length);
+      } catch (error) {
+        console.error("Error fetching NFTs:", error);
+        nftContainer.innerHTML = "<p>Error loading NFTs.</p>";
+      }
+    }
+
+    function makeDraggable(windowEl) {
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      windowEl.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        const rect = windowEl.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        windowEl.style.zIndex = ++globalZ;
+        document
+          .querySelectorAll(".nft-window")
+          .forEach((el) => el.classList.remove("active"));
+        windowEl.classList.add("active");
+
+        document.body.style.userSelect = "none";
+        
+        // 드래그 시작하면 애니메이션 멈춤
+        windowEl.style.animationPlayState = "paused";
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+
+        const container = document.getElementById("nft-container");
+        const cRect = container.getBoundingClientRect();
+
+        let newLeft = e.clientX - offsetX - cRect.left;
+        let newTop = e.clientY - offsetY - cRect.top;
+
+        const maxLeft = cRect.width - windowEl.offsetWidth;
+        const maxTop = cRect.height - windowEl.offsetHeight;
+
+        newLeft = Math.min(Math.max(newLeft, -40), maxLeft + 40);
+        newTop = Math.min(Math.max(newTop, -40), maxTop + 40);
+
+        windowEl.style.left = newLeft + "px";
+        windowEl.style.top = newTop + "px";
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (isDragging) {
+          isDragging = false;
+          document.body.style.userSelect = "";
+          // 드래그 끝나면 애니메이션 재개
+          document.querySelectorAll(".nft-window").forEach(el => {
+            el.style.animationPlayState = "running";
+          });
+        }
+      });
+
+      windowEl.addEventListener("mousedown", () => {
+        windowEl.style.zIndex = ++globalZ;
+        document
+          .querySelectorAll(".nft-window")
+          .forEach((el) => el.classList.remove("active"));
+        windowEl.classList.add("active");
+      });
+    }
+
+    function createGlobalRipple(x, y) {
+      const layer = document.getElementById("globalRippleLayer");
+
+      const ripple = document.createElement("div");
+      ripple.classList.add("bg-ripple");
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      layer.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+
+      const reflect = document.createElement("div");
+      reflect.classList.add("bg-ripple-reflect");
+      reflect.style.left = `${x}px`;
+      reflect.style.top = `${y + 80}px`;
+      layer.appendChild(reflect);
+      reflect.addEventListener("animationend", () => reflect.remove());
+    }
+
+    document.addEventListener("click", (e) => {
+      createGlobalRipple(e.clientX, e.clientY);
+    });
+
+    window.onload = fetchNFTs;
+  </script>
+</body>
+</html>
