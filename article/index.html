@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Le Generative Crypto Art</title>
+  <meta name="description" content="Une page web de présentation du Generative Crypto Art (art génératif et blockchain), avec exemples d'artistes et de plateformes." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Top bar -->
+  
+
+  <!-- Layout -->
+  <div class="layout">
+    <!-- Outline rail -->
+    <aside class="rail" aria-label="Outline">
+      <button class="rail__arrow" id="toTopBtn" type="button" aria-label="Revenir en haut">
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <nav class="rail__outline" aria-label="Plan">
+        <a class="outline__item" href="#definition"><span class="outline__no">1</span><span class="outline__txt">Définition</span></a>
+        <a class="outline__item" href="#origines"><span class="outline__no">2</span><span class="outline__txt">Origines</span></a>
+        <a class="outline__item" href="#blockchain"><span class="outline__no">3</span><span class="outline__txt">Blockchain</span></a>
+        <a class="outline__item" href="#artblocks"><span class="outline__no">4</span><span class="outline__txt">Art Blocks</span></a>
+        <a class="outline__item" href="#artistes"><span class="outline__no">5</span><span class="outline__txt">Artistes</span></a>
+        <a class="outline__item" href="#enjeux"><span class="outline__no">6</span><span class="outline__txt">Enjeux</span></a>
+        <a class="outline__item" href="#conclusion"><span class="outline__no">7</span><span class="outline__txt">Conclusion</span></a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Hero -->
+      <section class="hero" id="top">
+        <div class="hero__media" aria-hidden="true">
+  <img class="hero__img" src="img/3.png" alt="" />
+</div>
+
+        <div class="hero__text">
+          <h1 class="title">Le Generative Crypto Art</h1>
+          
+        </div>
+      </section>
+
+      <!-- Content -->
+      <article class="content" aria-label="Article">
+        <section class="block" id="definition">
+          <div class="block__no">1</div>
+          <div class="block__body">
+            <h2>Définition</h2>
+            <p>
+              Le <strong>Generative Crypto Art</strong> est un courant artistique qui utilise des <strong>algorithmes</strong>
+              pour produire des œuvres numériques. L’artiste ne dessine pas une image finale&nbsp;: il ou elle
+              conçoit un système (règles, paramètres, probabilités). L’œuvre est ensuite <strong>générée automatiquement</strong>,
+              souvent au moment où un NFT est créé sur la blockchain.
+            </p>
+            <p>
+              Cette approche met l’accent sur le processus&nbsp;: une même règle peut donner des résultats différents,
+              selon les variables et la part de hasard intégrée au programme.
+            </p>
+          </div>
+        </section>
+
+        <section class="block" id="origines">
+          <div class="block__no">2</div>
+          <div class="block__body">
+            <h2>Origines</h2>
+            <p>
+              Le Generative Crypto Art s’inscrit dans la continuité de l’<strong>art génératif</strong>,
+              développé dès les années 1960 avec l’usage de systèmes et d’ordinateurs pour produire des formes.
+              La blockchain change surtout les conditions de circulation&nbsp;: elle permet d’enregistrer l’existence d’une
+              œuvre, son historique (provenance) et son propriétaire.
+            </p>
+          </div>
+        </section>
+
+        <section class="block" id="blockchain">
+          <div class="block__no">3</div>
+          <div class="block__body">
+            <h2>Blockchain</h2>
+            <p>
+              Dans ce contexte, la blockchain ne sert pas seulement à “vendre” une image. Elle intervient dans la manière
+              dont l’œuvre est produite et reconnue. Dans certains projets, le code est stocké <em>on-chain</em>
+              (directement sur la blockchain), ce qui rend possible la régénération de l’œuvre sans serveur externe.
+            </p>
+            <p>
+              L’œuvre existe pleinement au moment de sa génération&nbsp;: le programme, les variables et le support technique
+              font partie du dispositif.
+            </p>
+          </div>
+        </section>
+
+        <section class="block" id="artblocks">
+          <div class="block__no">4</div>
+          <div class="block__body">
+            <h2>Art Blocks</h2>
+            <p>
+              <strong>Art Blocks</strong> est une plateforme associée à la diffusion de l’art génératif sur blockchain.
+              Les artistes y publient des algorithmes et les collectionneurs déclenchent la génération au moment de l’achat.
+              Le fonctionnement met l’accent sur le <strong>processus</strong> plutôt que sur une image prédéfinie.
+            </p>
+          </div>
+        </section>
+
+        <section class="block" id="artistes">
+          <div class="block__no">5</div>
+          <div class="block__body">
+            <h2>Artistes et œuvres</h2>
+            <div class="artist">
+              <div class="artist__media">
+                <img class="artist__img" data-fallback="hide" src="img/1.png" alt="Chromie Squiggle — visuel" />
+              </div>
+              <div class="artist__text">
+                <h3>Snowfro — <span class="muted">Chromie Squiggle</span></h3>
+                <p>
+                  Snowfro est un artiste et développeur à l’origine de la plateforme Art Blocks. Son œuvre
+                  <em>Chromie Squiggle</em> repose sur un programme qui génère des lignes colorées continues selon des paramètres
+                  (palette, épaisseur, type de mouvement).
+                </p>
+                <p>
+                  Chaque <em>Squiggle</em> est généré au moment de la création du NFT. Les œuvres partagent une structure
+                  reconnaissable, mais les variations dépendent des variables utilisées lors de la génération.
+                </p>
+              </div>
+            </div>
+
+            <div class="artist">
+              <div class="artist__media">
+                <img class="artist__img" data-fallback="hide" src="img/2.png" alt="Fidenza — visuel" />
+              </div>
+              <div class="artist__text">
+                <h3>Tyler Hobbs — <span class="muted">Fidenza</span></h3>
+                <p>
+                  Tyler Hobbs utilise des algorithmes pour produire des compositions abstraites générées par le code.
+                  Dans <em>Fidenza</em>, il définit des contraintes visuelles (distribution des formes, directions des lignes,
+                  gammes de couleurs) et intègre une part de hasard dans la génération.
+                </p>
+                <p>
+                  Chaque œuvre est produite à partir du même algorithme, mais aboutit à une composition différente en fonction des variables.
+                  Le projet montre comment un système unique peut produire une diversité de résultats visuels.
+                </p>
+              </div>
+            </div>
+
+            <p class="small note">
+              Ajoutez vos images dans <code>images/</code> (ex.&nbsp;<code>snowfro.jpg</code>, <code>tyler-hobbs.jpg</code>).
+              Si une image manque, la page la masque automatiquement.
+            </p>
+</div>
+        </section>
+
+        <section class="block" id="enjeux">
+          <div class="block__no">6</div>
+          <div class="block__body">
+            <h2>Enjeux et limites</h2>
+            <p>
+              Le Generative Crypto Art pose plusieurs questions. Les algorithmes reflètent des choix de conception
+              (règles, contraintes, paramètres) et ne sont donc pas neutres. Par ailleurs, l’accès à ces pratiques peut
+              demander des compétences techniques, ce qui influence qui peut produire ou comprendre ces œuvres.
+            </p>
+          </div>
+        </section>
+
+        <section class="block" id="conclusion">
+          <div class="block__no">7</div>
+          <div class="block__body">
+            <h2>Conclusion</h2>
+            <p>
+              Le Generative Crypto Art peut être décrit comme une pratique contemporaine basée sur le code et la blockchain,
+              où le système de génération est central. Il se relie à l’histoire de l’art génératif tout en utilisant
+              les outils et les conditions techniques actuelles.
+            </p>
+          </div>
+        </section>
+
+        </article>
+
+      
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
